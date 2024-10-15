@@ -20,7 +20,8 @@ public class ErtedemoApplication {
             return new WebMvcConfigurer() {
                 @Override
                 public void addCorsMappings(CorsRegistry registry) {
-                    registry.addMapping("/**")
+                    registry.addMapping("/api/**")
+                            .allowedOrigins("*") // Permite todos los dominios
                             .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
                 }
             };
