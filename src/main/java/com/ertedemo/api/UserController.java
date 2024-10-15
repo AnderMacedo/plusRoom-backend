@@ -47,14 +47,15 @@ public class UserController {
     }
 
     @PostMapping("/createUser")
-    public ResponseEntity<BaseResponse<Long>> createUser(@RequestBody CreateUserResource resource) {
+    public ResponseEntity<BaseResponse<UserResponse>> createUser(@RequestBody CreateUserResource resource) {
         Optional<User> user = userService.create(new User(resource));
 
         if (user.isPresent()) {
-            BaseResponse<Long> response = new BaseResponse<>(user.get().getId(), null, null, false);
+            UserResponse userResponse = new UserResponse(user.get());
+            BaseResponse<UserResponse> response = new BaseResponse<>(userResponse, null, null, false);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } else {
-            BaseResponse<Long> response = new BaseResponse<>(null, "500", "Internal Server Error", true);
+            BaseResponse<UserResponse> response = new BaseResponse<>(null, "500", "Internal Server Error", true);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
