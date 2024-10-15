@@ -19,11 +19,13 @@ public class ErtedemoApplication {
         public WebMvcConfigurer corsConfigurer(){
             return new WebMvcConfigurer() {
                 @Override
-                public void addCorsMappings(CorsRegistry registry) {
-                    registry.addMapping("/api/**")
-                            .allowedOrigins("*") // Permite todos los dominios
-                            .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
-                }
+                    public void addCorsMappings(CorsRegistry registry) {
+                        registry.addMapping("/**") // Permitir todas las rutas
+                            .allowedOrigins("*") // Permitir todos los dominios
+                            .allowedMethods("*") // Permitir todos los métodos
+                            .allowedHeaders("*")
+                            .allowCredentials(true);
+                    }
             };
         }
     }
