@@ -4,6 +4,8 @@ import com.ertedemo.api.resource.users.CreateUserResource;
 import com.ertedemo.api.resource.users.LoginCredential;
 import com.ertedemo.api.resource.users.UpdateUserResource;
 import com.ertedemo.api.resource.users.UserResponse;
+import com.ertedemo.domain.model.entites.Arrendador;
+import com.ertedemo.domain.model.entites.Arrendatario;
 import com.ertedemo.domain.model.entites.User;
 import com.ertedemo.domain.services.UserService;
 import com.ertedemo.shared.response.BaseResponse;
@@ -41,8 +43,16 @@ public class UserController {
 
     @PostMapping("/createUser")
     public ResponseEntity<UserResponse> createUser(@RequestBody CreateUserResource resource) {
-        Optional<User> user = userService.create(new User(resource));
-        return user.map(value -> ResponseEntity.status(HttpStatus.CREATED).body(new UserResponse(value)))
+        User user;
+        if ("Arrendatario".equalsIgnoreCase(resource.getUserType())) {
+            user = new Arrendatario(resource);
+        } else if ("Arrendador".equalsIgnoreCase(resource.getUserType())) {
+            user = new Arrendador(resource);
+        } else {
+            user = new User(resource);
+        }
+        Optional<User> createdUser = userService.create(user);
+        return createdUser.map(value -> ResponseEntity.status(HttpStatus.CREATED).body(new UserResponse(value)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 
@@ -66,7 +76,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
+/*
     @PutMapping("/rate-user/{userId}/{rate}")
     public ResponseEntity<UserResponse> rateUser(@PathVariable Long userId, @PathVariable Float rate) {
         Optional<User> user = userService.getById(userId);
@@ -76,7 +86,7 @@ public class UserController {
         user.get().setRankPoints(rate);
         Optional<User> updatedUser = userService.update(user.get());
         return ResponseEntity.ok(new UserResponse(updatedUser.get()));
-    }
+    }*/
 
     @PostMapping("/login")
     public ResponseEntity<Long> login(@RequestBody LoginCredential loginCredential) {
