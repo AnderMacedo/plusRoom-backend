@@ -24,7 +24,7 @@ public class ErtedemoApplication {
                             .allowedOrigins("*") // Permitir todos los dominios
                             .allowedMethods("*") // Permitir todos los métodos
                             .allowedHeaders("*")
-                            .allowCredentials(true);
+                            .allowCredentials(false);
                     }
             };
         }
