@@ -41,17 +41,18 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @PostMapping("/createUser")
-    public ResponseEntity<UserResponse> createUser(@RequestBody CreateUserResource resource) {
-        User user;
-        if ("Arrendatario".equalsIgnoreCase(resource.getUserType())) {
-            user = new Arrendatario(resource);
-        } else if ("Arrendador".equalsIgnoreCase(resource.getUserType())) {
-            user = new Arrendador(resource);
-        } else {
-            user = new User(resource);
-        }
-        Optional<User> createdUser = userService.create(user);
+    @PostMapping("/createArrendador")
+    public ResponseEntity<UserResponse> createArrendador(@RequestBody CreateUserResource resource) {
+        Arrendador arrendador = new Arrendador(resource);
+        Optional<User> createdUser = userService.create(arrendador);
+        return createdUser.map(value -> ResponseEntity.status(HttpStatus.CREATED).body(new UserResponse(value)))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+    }
+
+    @PostMapping("/createArrendatario")
+    public ResponseEntity<UserResponse> createArrendatario(@RequestBody CreateUserResource resource) {
+        Arrendatario arrendatario = new Arrendatario(resource);
+        Optional<User> createdUser = userService.create(arrendatario);
         return createdUser.map(value -> ResponseEntity.status(HttpStatus.CREATED).body(new UserResponse(value)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
