@@ -46,7 +46,7 @@ public class UserController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/createUser")
     public ResponseEntity<BaseResponse<Long>> createUser(@RequestBody CreateUserResource resource) {
         Optional<User> user = userService.create(new User(resource));
 
