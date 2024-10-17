@@ -5,17 +5,15 @@ import lombok.Data;
 @Data
 public class CreatePostResource {
     private String title;
-
     private String description;
-
-    private String characteristics;
-
     private String location;
-
     private Float price;
-
     private String category;
-
-    private Long author_id;
-
+    private String urlPhoto;
+    private Boolean available;
+    private Integer rooms;
+    private Integer bathrooms;
+    private Boolean pets;
+    private Boolean smoking;
+    private Long ownerId;
 }

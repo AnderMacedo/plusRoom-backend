@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -20,33 +22,67 @@ public class Landlord {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+
     @Column(name = "email", unique = true, nullable = false)
     private String email;
-
-    @Column(name = "phone_number")
-    private String phoneNumber;
 
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "age", nullable = false)
     private Integer age;
-    // Other fields related to Landlords
+
+    @Column(name = "gender")
+    private String gender;
+
+    @OneToMany(mappedBy = "landlord")
+    private List<Post> posts;
+
+    @OneToMany(mappedBy = "landlord")
+    private List<Customer> customers;
+
+    @Column(name = "rating")
+    private Float rating;
+
+    @OneToMany(mappedBy = "receiver")
+    private List<Message> receivedMessages;
+
+    @OneToMany(mappedBy = "sender")
+    private List<Message> sentMessages;
+
+    @Column(name = "photo")
+    private String photo;
+
+    @OneToMany(mappedBy = "landlord")
+    private List<Notification> listNotification;
 
     public Landlord() {
     }
+
     public Landlord(CreateLandlordResource resource) {
         this.name = resource.getName();
+        this.lastName = resource.getLastName();
         this.email = resource.getEmail();
-        this.phoneNumber = resource.getPhoneNumber();
         this.password = resource.getPassword();
+        this.description = resource.getDescription();
         this.age = resource.getAge();
+        this.gender = resource.getGender();
+        this.photo = resource.getPhoto();
     }
 
     public void updateLandlord(UpdateLandlordResource resource) {
         this.name = resource.getName();
-        this.phoneNumber = resource.getPhoneNumber();
+        this.lastName = resource.getLastName();
+        //this.phoneNumber = resource.getPhoneNumber();
+        this.email = resource.getEmail();
         this.age = resource.getAge();
+        this.description = resource.getDescription();
+        this.gender = resource.getGender();
+        this.photo = resource.getPhoto();
     }
-
 }

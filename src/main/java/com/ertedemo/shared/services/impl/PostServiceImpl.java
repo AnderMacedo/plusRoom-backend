@@ -1,5 +1,6 @@
 package com.ertedemo.shared.services.impl;
 
+import com.ertedemo.domain.model.entites.Landlord;
 import com.ertedemo.domain.model.entites.Post;
 import com.ertedemo.domain.model.entites.User;
 import com.ertedemo.domain.persistence.PostRepository;
@@ -46,7 +47,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getByAuthor(User author) {
-        return postRepository.findAllByAuthor(author);
+    public List<Post> getByOwner(Landlord owner) {
+        return postRepository.findByOwner(owner); // Add this line
     }
 }

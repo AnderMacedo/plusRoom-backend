@@ -32,50 +32,61 @@ public class Post {
 
     @NotNull
     @NotBlank
-    private String characteristics;
-
-    @NotNull
-    @NotBlank
     private String location;
 
     @NotNull
     private Float price;
 
-    @ElementCollection
-    @CollectionTable(name = "post_images", joinColumns = @JoinColumn(name = "post_id"))
-    @Column(name = "image_url")
-    private List<String> imageUrls;
-
     @NotNull
     @NotBlank
     private String category;
 
+    @NotNull
+    @NotBlank
+    private String urlPhoto;
+
     private Boolean available = true;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id")
-    private User author;
+    @NotNull
+    private Integer rooms;
+
+    @NotNull
+    private Integer bathrooms;
+
+    private Boolean pets;
+
+    private Boolean smoking;
 
     @ManyToOne
-    @JoinColumn(name = "renter_id")
-    private User renter;
+    @JoinColumn(name = "owner_id")
+    private Landlord owner;
 
-    public Post(User author, CreatePostResource resource){
+    public Post(Landlord owner, CreatePostResource resource) {
         this.title = resource.getTitle();
         this.description = resource.getDescription();
-        this.characteristics = resource.getCharacteristics();
         this.location = resource.getLocation();
         this.price = resource.getPrice();
         this.category = resource.getCategory();
-        this.author = author;
-    }
-    public void updatePost(UpdatePostResource resource){
-        this.title = resource.getTitle();
-        this.description= resource.getDescription();
-        this.characteristics=resource.getCharacteristics();
-        this.location=resource.getLocation();
-        this.price= resource.getPrice();
-        this.category= resource.getCategory();
+        this.urlPhoto = resource.getUrlPhoto();
+        this.available = resource.getAvailable();
+        this.rooms = resource.getRooms();
+        this.bathrooms = resource.getBathrooms();
+        this.pets = resource.getPets();
+        this.smoking = resource.getSmoking();
+        this.owner = owner;
     }
 
+    public void updatePost(UpdatePostResource resource) {
+        this.title = resource.getTitle();
+        this.description = resource.getDescription();
+        this.location = resource.getLocation();
+        this.price = resource.getPrice();
+        this.category = resource.getCategory();
+        this.urlPhoto = resource.getUrlPhoto();
+        this.available = resource.getAvailable();
+        this.rooms = resource.getRooms();
+        this.bathrooms = resource.getBathrooms();
+        this.pets = resource.getPets();
+        this.smoking = resource.getSmoking();
+    }
 }

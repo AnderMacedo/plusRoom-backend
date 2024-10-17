@@ -1,5 +1,6 @@
 package com.ertedemo.domain.services;
 
+import com.ertedemo.domain.model.entites.Landlord;
 import com.ertedemo.domain.model.entites.Post;
 import com.ertedemo.domain.model.entites.User;
 import org.springframework.http.ResponseEntity;
@@ -14,5 +15,5 @@ public interface PostService {
     Optional<Post> update(Post post);
     ResponseEntity<?> delete(Long postId);
 
-    List<Post> getByAuthor(User author);
+    List<Post> getByOwner(Landlord owner); // Add this line
 }

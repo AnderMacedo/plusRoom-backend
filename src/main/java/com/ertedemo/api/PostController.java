@@ -3,8 +3,10 @@ package com.ertedemo.api;
 import com.ertedemo.api.resource.posts.CreatePostResource;
 import com.ertedemo.api.resource.posts.PostResponse;
 import com.ertedemo.api.resource.posts.UpdatePostResource;
+import com.ertedemo.domain.model.entites.Landlord;
 import com.ertedemo.domain.model.entites.Post;
 import com.ertedemo.domain.model.entites.User;
+import com.ertedemo.domain.services.LandlordService;
 import com.ertedemo.domain.services.PostService;
 import com.ertedemo.domain.services.UserService;
 import com.ertedemo.shared.services.media.StorageService;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 public class PostController {
 
     private final PostService postService;
+    private final LandlordService landlordService;
     private final UserService userService;
     private final StorageService storageService;
     private final HttpServletRequest request;
@@ -52,16 +55,14 @@ public class PostController {
         return ResponseEntity.ok(new PostResponse(post.get()));
     }
 
-    @GetMapping("/author/{authorId}")
-    public ResponseEntity<List<PostResponse>> getPostsByAuthorId(@PathVariable Long authorId) {
-
-        Optional<User> user = userService.getById(authorId);
-
-        if (user.isEmpty())
+    @GetMapping("/owner/{ownerId}")
+    public ResponseEntity<List<PostResponse>> getPostsByOwnerId(@PathVariable Long ownerId) {
+        Optional<Landlord> landlord = landlordService.getById(ownerId);
+        if (landlord.isEmpty())
             return ResponseEntity.badRequest().build();
 
-        List<PostResponse> responseList = postService.getByAuthor(user.get()).stream()
-                .map(post -> new PostResponse(post))
+        List<PostResponse> responseList = postService.getByOwner(landlord.get()).stream()
+                .map(PostResponse::new)
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(responseList);
@@ -69,17 +70,12 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<PostResponse> addPost(@RequestBody CreatePostResource postResource) {
-
-        Optional<User> author =userService.getById(postResource.getAuthor_id());
-
-        if (author.isPresent()) {
-
-            Post post = new Post(author.get(), postResource);
+        Optional<Landlord> owner = landlordService.getById(postResource.getOwnerId());
+        if (owner.isPresent()) {
+            Post post = new Post(owner.get(), postResource);
             postService.create(post);
-
             return ResponseEntity.status(HttpStatus.CREATED).body(new PostResponse(post));
         }
-
         return ResponseEntity.badRequest().build();
     }
 
