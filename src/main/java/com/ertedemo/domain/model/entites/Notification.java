@@ -16,6 +16,7 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @ManyToMany
     @JoinTable(
             name = "notification_tenants",
@@ -23,6 +24,10 @@ public class Notification {
             inverseJoinColumns = @JoinColumn(name = "tenant_id")
     )
     private List<Tenant> tenants;
+
+    @ManyToOne
+    @JoinColumn(name = "landlord_id")
+    private Landlord landlord;
 
     @Column(name = "post_id", nullable = false)
     private Long postId;
