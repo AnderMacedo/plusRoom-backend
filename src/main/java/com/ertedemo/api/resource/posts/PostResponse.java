@@ -20,7 +20,7 @@ public class PostResponse {
     private Integer bathrooms;
     private Boolean pets;
     private Boolean smoking;
-    private Long ownerId;
+    private Long landlordId;
 
     public PostResponse(Post post) {
         this.id = post.getId();
@@ -35,6 +35,6 @@ public class PostResponse {
         this.bathrooms = post.getBathrooms();
         this.pets = post.getPets();
         this.smoking = post.getSmoking();
-        this.ownerId = post.getOwner().getId();
+        this.landlordId = post.getLandlord().getId();
     }
 }
