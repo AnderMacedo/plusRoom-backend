@@ -30,7 +30,7 @@ public class CustomerController {
         Optional<Tenant> tenant = tenantService.getById(resource.getTenantId());
 
         if (landlord.isPresent() && tenant.isPresent()) {
-            Customer customer = new Customer(landlord.get(), tenant.get(), resource.getStatus());
+            Customer customer = new Customer(resource, landlord.get(), tenant.get());
             customerService.create(customer);
             return ResponseEntity.status(HttpStatus.CREATED).body(new CustomerResponse(customer));
         }

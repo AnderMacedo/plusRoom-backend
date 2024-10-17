@@ -7,15 +7,23 @@ import lombok.Data;
 public class LandlordResponse {
     private Long id;
     private String name;
+    private String lastName;
     private String email;
-    private String phoneNumber;
     private Integer age;
+    private String gender;
+    private String description;
+    private Float rating;
+    private String photo;
 
     public LandlordResponse(Landlord landlord) {
         this.id = landlord.getId();
         this.name = landlord.getName();
+        this.lastName = landlord.getLastName();
         this.email = landlord.getEmail();
-        this.phoneNumber = landlord.getPhoneNumber();
         this.age = landlord.getAge();
+        this.gender = landlord.getGender();
+        this.description = landlord.getDescription();
+        this.rating = landlord.getRating();
+        this.photo = landlord.getPhoto();
     }
 }

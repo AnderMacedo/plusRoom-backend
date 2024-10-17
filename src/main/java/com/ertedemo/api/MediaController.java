@@ -5,48 +5,44 @@ import com.ertedemo.domain.model.entites.Post;
 import com.ertedemo.domain.services.PostService;
 import com.ertedemo.shared.services.media.StorageService;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
-@CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
-@RequestMapping(value = "api/media")
-@AllArgsConstructor
+@RequestMapping("/api/media")
 public class MediaController {
 
+    private final PostService postService;
     private final StorageService storageService;
     private final HttpServletRequest request;
-    private final PostService postService;
+
+    public MediaController(PostService postService, StorageService storageService, HttpServletRequest request) {
+        this.postService = postService;
+        this.storageService = storageService;
+        this.request = request;
+    }
 
     @PostMapping("/post/{postId}/upload")
     public ResponseEntity<PostResponse> uploadFiles(
             @PathVariable Long postId,
             @RequestParam("files") List<MultipartFile> files) {
 
-
         Optional<Post> post = postService.getById(postId);
 
         if (post.isEmpty())
             return ResponseEntity.notFound().build();
 
-        List<String> fileUrls = new ArrayList<>();
-
-        int filesToProcess = Math.min(files.size(), 3);
-
-        for (int i = 0; i < filesToProcess; i++) {
-            MultipartFile file = files.get(i);
+        if (!files.isEmpty()) {
+            MultipartFile file = files.get(0); // Solo se usa el primer archivo
             String path = storageService.storage(file);
             String host = request.getRequestURL().toString().replace(request.getRequestURI(), "");
             String url = ServletUriComponentsBuilder
@@ -55,15 +51,14 @@ public class MediaController {
                     .path(path)
                     .toUriString();
 
-            fileUrls.add(url);
+            post.get().setUrlPhoto(url);
+            Optional<Post> postWithImage = postService.update(post.get());
+
+            return ResponseEntity.ok(new PostResponse(postWithImage.get()));
         }
-        post.get().setImageUrls(fileUrls);
-        Optional<Post> postWithImages= postService.update(post.get());
 
-        //return ResponseEntity.status(HttpStatus.CREATED).body(new PostResponse(postWithImages.get()));
-        return ResponseEntity.ok(new PostResponse(postWithImages.get()));
+        return ResponseEntity.badRequest().build();
     }
-
 
     @GetMapping("{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) throws IOException {
@@ -75,5 +70,4 @@ public class MediaController {
                 .header(HttpHeaders.CONTENT_TYPE, contentType)
                 .body(file);
     }
-
 }
