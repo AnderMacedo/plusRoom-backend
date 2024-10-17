@@ -56,7 +56,7 @@ public class Tenant {
     @Column(name = "photo")
     private String photo;
 
-    @OneToMany(mappedBy = "tenant")
+    @ManyToMany(mappedBy = "tenants")
     private List<Notification> listNotification;
 
     public Tenant() {
