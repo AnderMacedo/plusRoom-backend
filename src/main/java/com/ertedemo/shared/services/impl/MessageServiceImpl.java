@@ -1,6 +1,7 @@
 package com.ertedemo.shared.services.impl;
 
 import com.ertedemo.domain.model.entites.Message;
+import com.ertedemo.domain.model.entites.Tenant;
 import com.ertedemo.domain.model.entites.User;
 import com.ertedemo.domain.persistence.MessageRepository;
 import com.ertedemo.domain.services.MessageService;
@@ -24,12 +25,13 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Optional<Message> create(Message message) {
-        return Optional.of(messageRepository.save(message));
+    public void create(Message message) {
+        messageRepository.save(message);
     }
 
     @Override
-    public List<Message> getByRecipient(User recipient) {
-        return messageRepository.findAllByRecipient(recipient);
+    public List<Message> getByRecipient(Tenant recipient) {
+        return messageRepository.findByRecipient(recipient);
     }
+
 }

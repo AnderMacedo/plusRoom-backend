@@ -2,11 +2,13 @@ package com.ertedemo.api;
 
 import com.ertedemo.api.resource.messages.MessageRequest;
 import com.ertedemo.api.resource.messages.MessageResponse;
+import com.ertedemo.domain.model.entites.Landlord;
 import com.ertedemo.domain.model.entites.Message;
-import com.ertedemo.domain.model.entites.User;
+import com.ertedemo.domain.model.entites.Tenant;
+import com.ertedemo.domain.services.LandlordService;
 import com.ertedemo.domain.services.MessageService;
-import com.ertedemo.domain.services.UserService;
-import lombok.AllArgsConstructor;
+import com.ertedemo.domain.services.TenantService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,59 +16,43 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
-@CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
-@RequestMapping("/api/messages")
+@RequestMapping("/messages")
 public class MessageController {
 
-    private final MessageService messageService;
-    private final UserService userService;
+    @Autowired
+    private MessageService messageService;
 
+    @Autowired
+    private LandlordService landlordService;
 
-    @GetMapping("{messageId}")
-    public ResponseEntity<MessageResponse> getMessageById(@PathVariable Long messageId) {
-
-        Optional<Message> message = messageService.getById(messageId);
-
-       if (message.isEmpty())
-           return ResponseEntity.badRequest().build();
-
-       return  ResponseEntity.ok(new MessageResponse(message.get()));
-    }
+    @Autowired
+    private TenantService tenantService;
 
     @PostMapping
-    public ResponseEntity<String> addMessage(@RequestBody MessageRequest messageRequest) {
-
-        Optional<User> author = userService.getById(messageRequest.getAuthorId());
-        Optional<User> recipient = userService.getById(messageRequest.getRecipientId());
+    public ResponseEntity<String> createMessage(@RequestBody MessageRequest messageRequest) {
+        Optional<Landlord> author = landlordService.getById(messageRequest.getAuthorId());
+        Optional<Tenant> recipient = tenantService.getById(messageRequest.getRecipientId());
 
         if (author.isPresent() && recipient.isPresent()) {
-
             Message message = new Message(author.get(), recipient.get(), messageRequest);
             messageService.create(message);
-
             return ResponseEntity.ok("Message added successfully.");
         }
-        return ResponseEntity.badRequest().body("Error to added message");
+        return ResponseEntity.badRequest().body("Error to add message");
     }
 
-
-    //Devuelve lista de mensajes dado IdRecipient
     @GetMapping("/recipient/{recipientId}")
     public ResponseEntity<List<MessageResponse>> getMessageByRecipientId(@PathVariable Long recipientId) {
-
-        Optional<User> recipient = userService.getById(recipientId);
+        Optional<Tenant> recipient = tenantService.getById(recipientId);
 
         if (recipient.isPresent()) {
             List<MessageResponse> messages = messageService.getByRecipient(recipient.get()).stream()
                     .map(message -> new MessageResponse(message))
                     .collect(Collectors.toList());
-
             return ResponseEntity.ok(messages);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-
 }

@@ -22,15 +22,15 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "author_id")
-    private User author;
+    private Landlord author;
 
     @ManyToOne
     @JoinColumn(name = "recipient_id")
-    private User recipient;
+    private Tenant recipient;
 
-    public Message(User author, User recipient, MessageRequest messageRequest){
-        this.author=author;
-        this.recipient= recipient;
+    public Message(Landlord author, Tenant recipient, MessageRequest messageRequest){
+        this.author = author;
+        this.recipient = recipient;
         this.content = messageRequest.getContent();
     }
 }
