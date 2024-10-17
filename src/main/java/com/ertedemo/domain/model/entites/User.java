@@ -36,7 +36,7 @@ public class User {
     private String password;
 
     @NotNull
-    private Integer age;
+    private Integer age = 18;
 
     @NotNull
     private String gender="";
@@ -44,21 +44,14 @@ public class User {
     @NotNull
     private String description = "";
 
-    @NotNull
-    private String userType;
-
-    //@Max(value = 5)
-    //private Float rankPoints = 5.0f;
+    @Max(value = 5)
+    private Float rankPoints = 5.0f;
 
     public User(CreateUserResource resource){
         this.name = resource.getName();
         this.lastName=resource.getLastName();
         this.email = resource.getEmail();
         this.password = resource.getPassword();
-        this.age=resource.getAge();
-        this.gender=resource.getGender();
-        this.description=resource.getDescription();
-        this.userType = resource.getUserType();
     }
     public void updateUser(UpdateUserResource resource){
         this.name = resource.getName();
@@ -69,4 +62,3 @@ public class User {
         this.description = resource.getDescription();
     }
 }
-

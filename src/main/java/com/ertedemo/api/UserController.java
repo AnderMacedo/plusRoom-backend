@@ -4,11 +4,8 @@ import com.ertedemo.api.resource.users.CreateUserResource;
 import com.ertedemo.api.resource.users.LoginCredential;
 import com.ertedemo.api.resource.users.UpdateUserResource;
 import com.ertedemo.api.resource.users.UserResponse;
-import com.ertedemo.domain.model.entites.Arrendador;
-import com.ertedemo.domain.model.entites.Arrendatario;
 import com.ertedemo.domain.model.entites.User;
 import com.ertedemo.domain.services.UserService;
-import com.ertedemo.shared.response.BaseResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-@CrossOrigin(origins = {"https://giving-perception-production.up.railway.app"})
+@CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -41,19 +38,10 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @PostMapping("/createArrendador")
-    public ResponseEntity<UserResponse> createArrendador(@RequestBody CreateUserResource resource) {
-        Arrendador arrendador = new Arrendador(resource);
-        Optional<User> createdUser = userService.create(arrendador);
-        return createdUser.map(value -> ResponseEntity.status(HttpStatus.CREATED).body(new UserResponse(value)))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
-    }
-
-    @PostMapping("/createArrendatario")
-    public ResponseEntity<UserResponse> createArrendatario(@RequestBody CreateUserResource resource) {
-        Arrendatario arrendatario = new Arrendatario(resource);
-        Optional<User> createdUser = userService.create(arrendatario);
-        return createdUser.map(value -> ResponseEntity.status(HttpStatus.CREATED).body(new UserResponse(value)))
+    @PostMapping("/createUser")
+    public ResponseEntity<UserResponse> createUser(@RequestBody CreateUserResource resource) {
+        Optional<User> user = userService.create(new User(resource));
+        return user.map(value -> ResponseEntity.status(HttpStatus.CREATED).body(new UserResponse(value)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 
@@ -77,7 +65,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-/*
+
     @PutMapping("/rate-user/{userId}/{rate}")
     public ResponseEntity<UserResponse> rateUser(@PathVariable Long userId, @PathVariable Float rate) {
         Optional<User> user = userService.getById(userId);
@@ -87,7 +75,7 @@ public class UserController {
         user.get().setRankPoints(rate);
         Optional<User> updatedUser = userService.update(user.get());
         return ResponseEntity.ok(new UserResponse(updatedUser.get()));
-    }*/
+    }
 
     @PostMapping("/login")
     public ResponseEntity<Long> login(@RequestBody LoginCredential loginCredential) {

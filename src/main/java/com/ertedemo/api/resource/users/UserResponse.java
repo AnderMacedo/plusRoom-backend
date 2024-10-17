@@ -10,7 +10,6 @@ public class UserResponse {
     private String name;
     private String lastName;
     private String email;
-    private String userType;
     //private Integer age;
     //private String gender="";
     //private String description = "";
@@ -21,7 +20,6 @@ public class UserResponse {
         this.name = user.getName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
-        this.userType = user.getUserType();
         //this.age = user.getAge();
         //this.gender = user.getGender();
         //this.description = user.getDescription();
