@@ -58,10 +58,10 @@ public class Post {
     private Boolean smoking;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private Landlord owner;
+    @JoinColumn(name = "landlord_id")
+    private Landlord landlord;
 
-    public Post(Landlord owner, CreatePostResource resource) {
+    public Post(Landlord landlord, CreatePostResource resource) {
         this.title = resource.getTitle();
         this.description = resource.getDescription();
         this.location = resource.getLocation();
@@ -73,7 +73,7 @@ public class Post {
         this.bathrooms = resource.getBathrooms();
         this.pets = resource.getPets();
         this.smoking = resource.getSmoking();
-        this.owner = owner;
+        this.landlord = landlord;
     }
 
     public void updatePost(UpdatePostResource resource) {
