@@ -1,5 +1,6 @@
 package com.ertedemo.domain.services;
 
+import com.ertedemo.api.resource.posts.CreatePostResource;
 import com.ertedemo.domain.model.entites.Landlord;
 import com.ertedemo.domain.model.entites.Post;
 import com.ertedemo.domain.model.entites.User;
@@ -16,4 +17,5 @@ public interface PostService {
     ResponseEntity<?> delete(Long postId);
 
     List<Post> getByLandlord(Landlord landlord);
+    Post createPost(CreatePostResource createPostResource);
 }

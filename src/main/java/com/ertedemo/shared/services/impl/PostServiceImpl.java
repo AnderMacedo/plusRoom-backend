@@ -1,8 +1,10 @@
 package com.ertedemo.shared.services.impl;
 
+import com.ertedemo.api.resource.posts.CreatePostResource;
 import com.ertedemo.domain.model.entites.Landlord;
 import com.ertedemo.domain.model.entites.Post;
 import com.ertedemo.domain.model.entites.User;
+import com.ertedemo.domain.persistence.LandlordRepository;
 import com.ertedemo.domain.persistence.PostRepository;
 import com.ertedemo.domain.services.PostService;
 import lombok.AllArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.Optional;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+    private final LandlordRepository landlordRepository; // Add this line
 
     @Override
     public List<Post> getAll() {
@@ -49,5 +52,14 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getByLandlord(Landlord landlord) {
         return postRepository.findByLandlord(landlord); // Add this line
+    }
+
+    @Override
+    public Post createPost(CreatePostResource createPostResource) {
+        Landlord landlord = landlordRepository.findById(createPostResource.getLandlordId())
+                .orElseThrow(() -> new RuntimeException("Landlord not found"));
+
+        Post post = new Post(landlord, createPostResource);
+        return postRepository.save(post);
     }
 }

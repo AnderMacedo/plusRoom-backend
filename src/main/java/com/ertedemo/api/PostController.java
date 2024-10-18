@@ -69,14 +69,15 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<PostResponse> addPost(@RequestBody CreatePostResource postResource) {
-        Optional<Landlord> landlord = landlordService.getById(postResource.getLandlordId());
-        if (landlord.isPresent()) {
-            Post post = new Post(landlord.get(), postResource);
-            postService.create(post);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new PostResponse(post));
+    public ResponseEntity<Post> createPost(@RequestBody CreatePostResource createPostResource) {
+        try {
+            Post post = postService.createPost(createPostResource);
+            return ResponseEntity.status(HttpStatus.CREATED).body(post);
+        } catch (Exception e) {
+            // Log the exception message
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-        return ResponseEntity.badRequest().build();
     }
 
     @PutMapping()
