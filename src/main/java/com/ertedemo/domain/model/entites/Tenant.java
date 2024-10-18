@@ -47,11 +47,12 @@ public class Tenant {
     @OneToMany(mappedBy = "tenant")
     private List<Customer> customers;
 
-    @OneToMany(mappedBy = "receiver")
-    private List<Message> receivedMessages;
+    //@OneToMany(mappedBy = "recipient") // Mensajes recibidos por el tenant
+    //private List<Message> receivedMessages;
 
-    @OneToMany(mappedBy = "sender")
-    private List<Message> sentMessages;
+    //@OneToMany(mappedBy = "author") // Mensajes enviados por el tenant
+    //private List<Message> sentMessages;
+
 
     @Column(name = "photo")
     private String photo;

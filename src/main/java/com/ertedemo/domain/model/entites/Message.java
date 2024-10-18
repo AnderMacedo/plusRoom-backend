@@ -21,12 +21,12 @@ public class Message {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
-    private Landlord author;
+    @JoinColumn(name = "author_id", nullable = false) // ID del Landlord que envía el mensaje
+    private Landlord author; // El autor es un Landlord
 
     @ManyToOne
-    @JoinColumn(name = "recipient_id")
-    private Tenant recipient;
+    @JoinColumn(name = "recipient_id", nullable = false) // ID del Tenant que recibe el mensaje
+    private Tenant recipient; // El destinatario es un Tenant
 
     public Message(Landlord author, Tenant recipient, MessageRequest messageRequest){
         this.author = author;

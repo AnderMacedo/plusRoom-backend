@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-    List<Post> findByOwner(Landlord owner); // Add this line
+    List<Post> findByLandlord(Landlord landlord);
 }

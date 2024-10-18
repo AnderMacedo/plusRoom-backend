@@ -15,5 +15,5 @@ public class CreatePostResource {
     private Integer bathrooms;
     private Boolean pets;
     private Boolean smoking;
-    private Long ownerId;
+    private Long landlordId;
 }

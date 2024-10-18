@@ -47,7 +47,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getByOwner(Landlord owner) {
-        return postRepository.findByOwner(owner); // Add this line
+    public List<Post> getByLandlord(Landlord landlord) {
+        return postRepository.findByLandlord(landlord); // Add this line
     }
 }

@@ -49,11 +49,11 @@ public class Landlord {
     @Column(name = "rating")
     private Float rating;
 
-    @OneToMany(mappedBy = "receiver")
-    private List<Message> receivedMessages;
+    //@OneToMany(mappedBy = "recipient")
+    //private List<Message> receivedMessages;
 
-    @OneToMany(mappedBy = "sender")
-    private List<Message> sentMessages;
+    //@OneToMany(mappedBy = "author")
+    //private List<Message> sentMessages;
 
     @Column(name = "photo")
     private String photo;

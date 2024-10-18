@@ -15,5 +15,5 @@ public interface PostService {
     Optional<Post> update(Post post);
     ResponseEntity<?> delete(Long postId);
 
-    List<Post> getByOwner(Landlord owner); // Add this line
+    List<Post> getByLandlord(Landlord landlord);
 }

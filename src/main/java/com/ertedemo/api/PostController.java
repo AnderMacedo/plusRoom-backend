@@ -55,13 +55,13 @@ public class PostController {
         return ResponseEntity.ok(new PostResponse(post.get()));
     }
 
-    @GetMapping("/owner/{ownerId}")
-    public ResponseEntity<List<PostResponse>> getPostsByOwnerId(@PathVariable Long ownerId) {
-        Optional<Landlord> landlord = landlordService.getById(ownerId);
+    @GetMapping("/landlord/{landlordId}")
+    public ResponseEntity<List<PostResponse>> getPostsByLandlordId(@PathVariable Long landlordId) {
+        Optional<Landlord> landlord = landlordService.getById(landlordId);
         if (landlord.isEmpty())
             return ResponseEntity.badRequest().build();
 
-        List<PostResponse> responseList = postService.getByOwner(landlord.get()).stream()
+        List<PostResponse> responseList = postService.getByLandlord(landlord.get()).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
 
@@ -70,9 +70,9 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<PostResponse> addPost(@RequestBody CreatePostResource postResource) {
-        Optional<Landlord> owner = landlordService.getById(postResource.getOwnerId());
-        if (owner.isPresent()) {
-            Post post = new Post(owner.get(), postResource);
+        Optional<Landlord> landlord = landlordService.getById(postResource.getLandlordId());
+        if (landlord.isPresent()) {
+            Post post = new Post(landlord.get(), postResource);
             postService.create(post);
             return ResponseEntity.status(HttpStatus.CREATED).body(new PostResponse(post));
         }
