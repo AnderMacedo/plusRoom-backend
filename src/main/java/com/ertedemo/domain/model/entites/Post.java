@@ -2,6 +2,8 @@ package com.ertedemo.domain.model.entites;
 
 import com.ertedemo.api.resource.posts.CreatePostResource;
 import com.ertedemo.api.resource.posts.UpdatePostResource;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -59,6 +61,7 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "landlord_id")
+    @JsonBackReference
     private Landlord landlord;
 
     public Post(Landlord landlord, CreatePostResource resource) {

@@ -3,6 +3,7 @@ package com.ertedemo.domain.model.entites;
 import com.ertedemo.api.resource.landlord.CreateLandlordResource;
 import com.ertedemo.api.resource.landlord.UpdateLandlordResource;
 import com.ertedemo.api.resource.tenant.CreateTenantResource;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,7 +41,8 @@ public class Landlord {
     @Column(name = "gender")
     private String gender;
 
-    @OneToMany(mappedBy = "landlord")
+    @OneToMany(mappedBy = "landlord", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Post> posts;
 
     @OneToMany(mappedBy = "landlord")
