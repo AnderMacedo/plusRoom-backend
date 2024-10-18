@@ -53,13 +53,4 @@ public class PostServiceImpl implements PostService {
     public List<Post> getByLandlord(Landlord landlord) {
         return postRepository.findByLandlord(landlord); // Add this line
     }
-
-    @Override
-    public Post createPost(CreatePostResource createPostResource) {
-        Landlord landlord = landlordRepository.findById(createPostResource.getLandlordId())
-                .orElseThrow(() -> new RuntimeException("Landlord not found"));
-
-        Post post = new Post(landlord, createPostResource);
-        return postRepository.save(post);
-    }
 }

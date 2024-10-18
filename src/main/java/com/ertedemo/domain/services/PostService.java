@@ -17,5 +17,4 @@ public interface PostService {
     ResponseEntity<?> delete(Long postId);
 
     List<Post> getByLandlord(Landlord landlord);
-    Post createPost(CreatePostResource createPostResource);
 }
