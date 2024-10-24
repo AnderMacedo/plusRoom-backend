@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class RoomiePreferenceResource {
     private Long id;
-    private Long userId;
+    private Long tenantId;
     private List<String> preferences;
     private List<String> hobbies;
     private String locationPreference;
@@ -22,7 +22,7 @@ public class RoomiePreferenceResource {
 
     public RoomiePreferenceResource(RoomiePreference roomiePreference) {
         this.id = roomiePreference.getId();
-        this.userId = roomiePreference.getUserId();
+        this.tenantId = roomiePreference.getTenantId();
         this.preferences = roomiePreference.getPreferences();
         this.hobbies = roomiePreference.getHobbies();
         this.locationPreference = roomiePreference.getLocationPreference();
