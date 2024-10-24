@@ -3,6 +3,7 @@ package com.ertedemo.api;
 import com.ertedemo.api.resource.roomie.CreateRoomiePreferenceResource;
 import com.ertedemo.api.resource.roomie.RoomiePreferenceResource;
 import com.ertedemo.domain.model.entites.RoomiePreference;
+import com.ertedemo.domain.model.entites.Tenant;
 import com.ertedemo.domain.model.entites.User;
 import com.ertedemo.domain.services.RoomiePreferenceService;
 import com.ertedemo.shared.response.BaseResponse;
@@ -22,17 +23,17 @@ public class RoomieController {
     private RoomiePreferenceService roomiePreferenceService;
 
     @GetMapping("/search")
-    public List<User> searchRoomies(
+    public List<Tenant> searchRoomies(
             @RequestParam(value = "location", required = false) String location,
             @RequestParam(value = "budget", required = false) Float budget) {
         return roomiePreferenceService.findByLocationAndBudget(location, budget);
     }
 
     @PostMapping("/preferences")
-    public ResponseEntity<BaseResponse<RoomiePreferenceResource>> savePreferences(@RequestParam Long userId, @RequestBody CreateRoomiePreferenceResource resource) {
+    public ResponseEntity<BaseResponse<RoomiePreferenceResource>> savePreferences(@RequestParam Long tenantId, @RequestBody CreateRoomiePreferenceResource resource) {
         try {
             RoomiePreference preferences = new RoomiePreference();
-            preferences.setUserId(userId);
+            preferences.setTenantId(tenantId);
             preferences.setPreferences(resource.getPreferences());
             preferences.setHobbies(resource.getHobbies());
             preferences.setLocationPreference(resource.getLocationPreference());
@@ -57,9 +58,9 @@ public class RoomieController {
     }
 
     @PutMapping("/preferences")
-    public ResponseEntity<BaseResponse<RoomiePreferenceResource>> updatePreferences(@RequestParam Long userId, @RequestBody CreateRoomiePreferenceResource resource) {
+    public ResponseEntity<BaseResponse<RoomiePreferenceResource>> updatePreferences(@RequestParam Long tenantId, @RequestBody CreateRoomiePreferenceResource resource) {
         try {
-            RoomiePreference existingPreferences = roomiePreferenceService.findByUserId(userId);
+            RoomiePreference existingPreferences = roomiePreferenceService.findByTenantId(tenantId);
             if (existingPreferences == null) {
                 BaseResponse<RoomiePreferenceResource> errorResponse = new BaseResponse<>(null, "PREFERENCES_NOT_FOUND", "No se encontraron preferencias para este usuario.", true);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);

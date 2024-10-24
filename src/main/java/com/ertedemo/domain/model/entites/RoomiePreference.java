@@ -18,8 +18,8 @@ public class RoomiePreference {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "tenant_id")
+    private Long tenantId;
 
     @ElementCollection
     @CollectionTable(name = "preferences", joinColumns = @JoinColumn(name = "roomie_preference_id"))

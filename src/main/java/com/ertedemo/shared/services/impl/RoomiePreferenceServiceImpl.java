@@ -1,8 +1,10 @@
 package com.ertedemo.shared.services.impl;
 
 import com.ertedemo.domain.model.entites.RoomiePreference;
+import com.ertedemo.domain.model.entites.Tenant;
 import com.ertedemo.domain.model.entites.User;
 import com.ertedemo.domain.persistence.RoomiePreferenceRepository;
+import com.ertedemo.domain.persistence.TenantRepository;
 import com.ertedemo.domain.persistence.UserRepository;
 import com.ertedemo.domain.services.RoomiePreferenceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ public class RoomiePreferenceServiceImpl implements RoomiePreferenceService {
     private RoomiePreferenceRepository roomiePreferenceRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private TenantRepository tenantRepository;
 
     @Override
     public RoomiePreference savePreferences(RoomiePreference preferences) {
@@ -26,16 +28,16 @@ public class RoomiePreferenceServiceImpl implements RoomiePreferenceService {
     }
 
     @Override
-    public List<User> findByLocationAndBudget(String location, Float budget) {
+    public List<Tenant> findByLocationAndBudget(String location, Float budget) {
         List<RoomiePreference> preferences = roomiePreferenceRepository.findAll();
         return preferences.stream()
                 .filter(pref -> (location == null || location.isEmpty() || pref.getLocationPreference().equals(location)) &&
                         (budget == null || pref.getBudget().equals(budget)))
-                .map(pref -> userRepository.findById(pref.getUserId()).orElse(null))
+                .map(pref -> tenantRepository.findById(pref.getTenantId()).orElse(null))
                 .collect(Collectors.toList());
     }
     @Override
-    public RoomiePreference findByUserId(Long userId) {
-        return roomiePreferenceRepository.findByUserId(userId);
+    public RoomiePreference findByTenantId(Long tenantId) {
+        return roomiePreferenceRepository.findByTenantId(tenantId);
     }
 }

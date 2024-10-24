@@ -1,8 +1,10 @@
 package com.ertedemo.shared.services.impl;
 
 import com.ertedemo.domain.model.entites.RoomiePreference;
+import com.ertedemo.domain.model.entites.Tenant;
 import com.ertedemo.domain.model.entites.User;
 import com.ertedemo.domain.persistence.RoomiePreferenceRepository;
+import com.ertedemo.domain.persistence.TenantRepository;
 import com.ertedemo.domain.persistence.UserRepository;
 import com.ertedemo.domain.services.RoomieMatchingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +20,16 @@ public class RoomieMatchingServiceImpl implements RoomieMatchingService {
     private RoomiePreferenceRepository roomiePreferenceRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private TenantRepository tenantRepository;
 
     @Override
-    public List<User> findMatches(User user) {
-        RoomiePreference userPreferences = roomiePreferenceRepository.findByUserId(user.getId());
+    public List<Tenant> findMatches(Tenant tenant) {
+        RoomiePreference tenantPreferences = roomiePreferenceRepository.findByTenantId(tenant.getId());
         List<RoomiePreference> allPreferences = roomiePreferenceRepository.findAll();
         return allPreferences.stream()
-                .filter(pref -> !pref.getUserId().equals(user.getId()))
-                .filter(pref -> pref.getLocationPreference().equals(userPreferences.getLocationPreference()))
-                .map(pref -> userRepository.findById(pref.getUserId()).orElse(null))
+                .filter(pref -> !pref.getTenantId().equals(tenant.getId()))
+                .filter(pref -> pref.getLocationPreference().equals(tenantPreferences.getLocationPreference()))
+                .map(pref -> tenantRepository.findById(pref.getTenantId()).orElse(null))
                 .collect(Collectors.toList());
     }
 }
