@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RoomiePreferenceRepository extends JpaRepository<RoomiePreference, Long> {
-    RoomiePreference findByUserId(Long userId);
     RoomiePreference findByTenantId(Long tenantId);
 }
