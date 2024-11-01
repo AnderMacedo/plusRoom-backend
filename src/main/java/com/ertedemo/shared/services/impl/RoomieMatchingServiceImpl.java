@@ -27,9 +27,9 @@ public class RoomieMatchingServiceImpl implements RoomieMatchingService {
         RoomiePreference tenantPreferences = roomiePreferenceRepository.findByTenantId(tenant.getId());
         List<RoomiePreference> allPreferences = roomiePreferenceRepository.findAll();
         return allPreferences.stream()
-                .filter(pref -> !pref.getTenantId().equals(tenant.getId()))
+                .filter(pref -> !pref.getTenant().getId().equals(tenant.getId()))
                 .filter(pref -> pref.getLocationPreference().equals(tenantPreferences.getLocationPreference()))
-                .map(pref -> tenantRepository.findById(pref.getTenantId()).orElse(null))
+                .map(pref -> tenantRepository.findById(pref.getTenant().getId()).orElse(null))
                 .collect(Collectors.toList());
     }
 }
