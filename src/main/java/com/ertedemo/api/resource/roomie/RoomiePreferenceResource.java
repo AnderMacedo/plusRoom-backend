@@ -22,7 +22,7 @@ public class RoomiePreferenceResource {
 
     public RoomiePreferenceResource(RoomiePreference roomiePreference) {
         this.id = roomiePreference.getId();
-        this.tenantId = roomiePreference.getTenantId();
+        this.tenantId = roomiePreference.getTenant().getId();
         this.preferences = roomiePreference.getPreferences();
         this.hobbies = roomiePreference.getHobbies();
         this.locationPreference = roomiePreference.getLocationPreference();
