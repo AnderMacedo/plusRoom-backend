@@ -44,9 +44,10 @@ public class User {
     @NotNull
     private String description = "";
 
-    /*@Max(value = 5)
-    private Float rankPoints = 5.0f;*/
+    @Max(value = 5)
+    private Float rankPoints = 5.0f;
 
+    /*constructor*/
     public User(CreateUserResource resource){
         this.name = resource.getName();
         this.lastName=resource.getLastName();
