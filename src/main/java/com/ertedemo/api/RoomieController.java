@@ -6,6 +6,8 @@ import com.ertedemo.domain.model.entites.RoomiePreference;
 import com.ertedemo.domain.model.entites.Tenant;
 import com.ertedemo.domain.model.entites.User;
 import com.ertedemo.domain.services.RoomiePreferenceService;
+import com.ertedemo.domain.services.TenantService;
+import com.ertedemo.shared.exception.ResourceNotFoundException;
 import com.ertedemo.shared.response.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,6 +24,9 @@ public class RoomieController {
     @Autowired
     private RoomiePreferenceService roomiePreferenceService;
 
+    @Autowired
+    private TenantService tenantService;
+
     @GetMapping("/search")
     public List<Tenant> searchRoomies(
             @RequestParam(value = "location", required = false) String location,
@@ -29,11 +34,20 @@ public class RoomieController {
         return roomiePreferenceService.findByLocationAndBudget(location, budget);
     }
 
+    @GetMapping("/search/preferences")
+    public RoomiePreference searchRoomiesByTenantId(
+            @RequestParam(value = "tenantId", required = false) Long tenantId) {
+        return roomiePreferenceService.findByTenantId(tenantId);
+    }
+
     @PostMapping("/preferences")
     public ResponseEntity<BaseResponse<RoomiePreferenceResource>> savePreferences(@RequestParam Long tenantId, @RequestBody CreateRoomiePreferenceResource resource) {
         try {
             RoomiePreference preferences = new RoomiePreference();
-            preferences.setTenantId(tenantId);
+            var tenant = tenantService.getById(tenantId)
+                    .orElseThrow(() -> new ResourceNotFoundException("The tenant with id " +
+                            tenantId + " does not exist"));
+            preferences.setTenant(tenant);
             preferences.setPreferences(resource.getPreferences());
             preferences.setHobbies(resource.getHobbies());
             preferences.setLocationPreference(resource.getLocationPreference());

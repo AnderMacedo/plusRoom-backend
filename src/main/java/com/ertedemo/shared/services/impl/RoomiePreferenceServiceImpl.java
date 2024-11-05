@@ -7,6 +7,7 @@ import com.ertedemo.domain.persistence.RoomiePreferenceRepository;
 import com.ertedemo.domain.persistence.TenantRepository;
 import com.ertedemo.domain.persistence.UserRepository;
 import com.ertedemo.domain.services.RoomiePreferenceService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,8 @@ public class RoomiePreferenceServiceImpl implements RoomiePreferenceService {
     @Autowired
     private TenantRepository tenantRepository;
 
+    private ModelMapper modelMapper;
+
     @Override
     public RoomiePreference savePreferences(RoomiePreference preferences) {
         return roomiePreferenceRepository.save(preferences);
@@ -33,7 +36,7 @@ public class RoomiePreferenceServiceImpl implements RoomiePreferenceService {
         return preferences.stream()
                 .filter(pref -> (location == null || location.isEmpty() || pref.getLocationPreference().equals(location)) &&
                         (budget == null || pref.getBudget().equals(budget)))
-                .map(pref -> tenantRepository.findById(pref.getTenantId()).orElse(null))
+                .map(pref -> tenantRepository.findById(pref.getTenant().getId()).orElse(null))
                 .collect(Collectors.toList());
     }
     @Override

@@ -1,14 +1,17 @@
 package com.ertedemo.domain.model.entites;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -18,8 +21,10 @@ public class RoomiePreference {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "tenant_id")
-    private Long tenantId;
+    @OneToOne
+    @JoinColumn(name = "tenant_id", nullable = false, foreignKey = @ForeignKey(name = "FK_roomie_preferences_tenant"))
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Tenant tenant;
 
     @ElementCollection
     @CollectionTable(name = "preferences", joinColumns = @JoinColumn(name = "roomie_preference_id"))
